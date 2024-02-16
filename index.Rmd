@@ -12,8 +12,9 @@ knitr::opts_chunk$set(cache = TRUE)
   ```{r}
   library(tidyverse)
   library(spotifyr)
+  library(dplyr)
+  library(ggplot2)
   ```
-
 
 
 ```{r}
@@ -22,6 +23,8 @@ Top50USA <- get_playlist_audio_features("", "37i9dQZEVXbLRQDuF5jeBp")
 Top50Brazil <- get_playlist_audio_features("", "37i9dQZEVXbMXbN3EUUhlg")
 Top50Australia <- get_playlist_audio_features("", "37i9dQZEVXbJPcfkRz0wJ0")
 Top50Philippines <- get_playlist_audio_features("", "37i9dQZEVXbNBz9cRCSFkY")
+Top50Morocco <- get_playlist_audio_features("", "37i9dQZEVXbJU9eQpX8gPT")
+Top50UK <- get_playlist_audio_features("", "37i9dQZEVXbLnolsZ8PSNw")
 ```
 
 ## Playlists
@@ -35,62 +38,80 @@ Top50s <-
     mutate(Top50USA, category = "Top50USA"),
     mutate(Top50Brazil, category = "Top50Brazil"),
     mutate(Top50Australia, category = "Top50Australia"),
-    mutate(Top50Philippines, category = "Top50Philippines")
+    mutate(Top50Philippines, category = "Top50Philippines"),
+    mutate(Top50Morocco, category = "Top50Morocco"),
+    mutate(Top50UK, category = "Top50UK")
   )
 ```
 
 ## Including Plots
 
 ```{r}
-Top50s %>% ggplot(aes(x = valence, y = energy)) + geom_jitter() + geom_smooth()
+country_colors <- c("Top50USA" = "#b22222", "Top50Australia" = "#006400", "Top50Brazil" = "#ffd700", 
+                    "Top50Netherlands" = "#ff4500", "Top50Philippines" = "#0000ff", "Top50Morocco" = "#8b0000", "Top50UK" = "#000080")
 ```
 
 ```{r}
-Top50s %>%
-  ggplot(aes(x = category, y = danceability, fill = category)) +
-  geom_violin(trim = FALSE) +
-  geom_boxplot(width = 0.1, outlier.shape = NA, fill = "white", color = "black", alpha = 0.5) +
-  scale_fill_brewer(palette = "Set2") +
-  theme_minimal() +
-  labs(
-    title = "Distribution of Energy Levels Across Playlists",
-    x = "Playlist",
-    y = "Danceability Level",
-    fill = "Playlist"
-  ) +
-  theme(
-    legend.position = "none",
-    plot.title = element_text(hjust = 0.5)
-  )
+Top50s %>% ggplot(aes(x = valence, y = energy)) + geom_jitter(aes(color = category)) + geom_smooth() + scale_color_manual(values = country_colors)
 ```
 
 ```{r}
-avg_values <- Top50s %>%
-  group_by(category) %>%
-  summarise(
-    avg_energy = mean(energy, na.rm = TRUE),
-    avg_valence = mean(valence, na.rm = TRUE)
-  )
+# Function to capitalize the first letter of a string
+capitalize_first <- function(x) {
+  paste(tools::toTitleCase(x), collapse = " ")
+}
 
-# Create a bar plot comparing average energy and valence across playlists (countries)
-ggplot(avg_values, aes(x = category)) +
-  geom_bar(aes(y = avg_energy, fill = "Energy"), stat = "identity", alpha = 0.7, position = "dodge") +
-  geom_bar(aes(y = avg_valence, fill = "Valence"), stat = "identity", alpha = 0.7, position = "dodge") +
-  scale_y_continuous(labels = scales::percent) +
-  theme_minimal() +
-  labs(
-    title = "Comparison of Average Energy and Valence Across Playlists",
-    x = "Playlist (Country)",
-    y = "Average Value",
-    fill = NULL
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(hjust = 0.5)
-  ) +
-  scale_fill_manual(values = c("Energy" = "#1f77b4", "Valence" = "#ff7f0e"), name = "Attribute",
-                    labels = c("Energy", "Valence")) +
-  guides(fill = guide_legend(title = "Attribute"))
+# Function to generate violin plot for any feature
+plot_feature <- function(data, feature) {
+  feature_str <- capitalize_first(deparse(substitute(feature)))  # Capitalize the first letter of the feature
+  
+  # Calculate the average feature value for each country
+  avg_feature <- data %>%
+    group_by(category) %>%
+    summarise(avg_value = mean({{ feature }})) %>%
+    arrange(desc(avg_value))  # Order by average feature value from high to low
+  
+  # Create the violin plot
+  ggplot(data, aes(x = reorder(category, -{{ feature }}), y = {{ feature }}, fill = category)) +
+    geom_violin(trim = FALSE) +
+    geom_boxplot(width = 0.1, outlier.shape = NA, fill = "white", color = "black", alpha = 0.5) +
+    scale_fill_manual(values = country_colors) +
+    theme_minimal() +
+    labs(
+      title = paste("Distribution of", feature_str, "Levels Across Playlists"),
+      x = "Playlist",
+      y = paste(feature_str, "Level"),
+      fill = "Country"
+    ) +
+    theme(
+      legend.position = "none",
+      plot.title = element_text(hjust = 0.5),
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+}
 
+# plot acousticness
+plot_feature(Top50s, acousticness)
+
+# plot danceability
+plot_feature(Top50s, danceability)
+
+# plot energy
+plot_feature(Top50s, energy)
+
+# plot liveness
+plot_feature(Top50s, liveness)
+
+# plot loudness
+plot_feature(Top50s, loudness)
+
+# plot speechiness
+plot_feature(Top50s, speechiness)
+
+# plot tempo
+plot_feature(Top50s, tempo)
+
+# plot valence
+plot_feature(Top50s, valence)
 
 ```
