@@ -5,26 +5,92 @@ date: "2024-02-12"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, echo=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
 ```
 
-## R Markdown
+  ```{r}
+  library(tidyverse)
+  library(spotifyr)
+  ```
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r}
+Top50Netherlands <- get_playlist_audio_features("", "37i9dQZEVXbKCF6dqVpDkS")
+Top50USA <- get_playlist_audio_features("", "37i9dQZEVXbLRQDuF5jeBp")
+Top50Brazil <- get_playlist_audio_features("", "37i9dQZEVXbMXbN3EUUhlg")
+Top50Australia <- get_playlist_audio_features("", "37i9dQZEVXbJPcfkRz0wJ0")
+Top50Philippines <- get_playlist_audio_features("", "37i9dQZEVXbNBz9cRCSFkY")
+```
+
+## Playlists
+
+These are multiple top 50 playlists taken as raw data here.
+
+```{r}
+Top50s <-
+  bind_rows(
+    mutate(Top50Netherlands, category = "Top50Netherlands"),
+    mutate(Top50USA, category = "Top50USA"),
+    mutate(Top50Brazil, category = "Top50Brazil"),
+    mutate(Top50Australia, category = "Top50Australia"),
+    mutate(Top50Philippines, category = "Top50Philippines")
+  )
 ```
 
 ## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+Top50s %>% ggplot(aes(x = valence, y = energy)) + geom_jitter() + geom_smooth()
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+Top50s %>%
+  ggplot(aes(x = category, y = danceability, fill = category)) +
+  geom_violin(trim = FALSE) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, fill = "white", color = "black", alpha = 0.5) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Energy Levels Across Playlists",
+    x = "Playlist",
+    y = "Danceability Level",
+    fill = "Playlist"
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+```{r}
+avg_values <- Top50s %>%
+  group_by(category) %>%
+  summarise(
+    avg_energy = mean(energy, na.rm = TRUE),
+    avg_valence = mean(valence, na.rm = TRUE)
+  )
+
+# Create a bar plot comparing average energy and valence across playlists (countries)
+ggplot(avg_values, aes(x = category)) +
+  geom_bar(aes(y = avg_energy, fill = "Energy"), stat = "identity", alpha = 0.7, position = "dodge") +
+  geom_bar(aes(y = avg_valence, fill = "Valence"), stat = "identity", alpha = 0.7, position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal() +
+  labs(
+    title = "Comparison of Average Energy and Valence Across Playlists",
+    x = "Playlist (Country)",
+    y = "Average Value",
+    fill = NULL
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  ) +
+  scale_fill_manual(values = c("Energy" = "#1f77b4", "Valence" = "#ff7f0e"), name = "Attribute",
+                    labels = c("Energy", "Valence")) +
+  guides(fill = guide_legend(title = "Attribute"))
+
+
+```
