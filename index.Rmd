@@ -54,11 +54,24 @@ country_colors <- c("Top50USA" = "#b22222", "Top50Australia" = "#006400", "Top50
                     "Top50Netherlands" = "#ff4500", "Top50Philippines" = "#0000ff", "Top50Morocco" = "#8b0000", "Top50UK" = "#000080")
 ```
 
+
 ```{r}
-Top50s %>% ggplot(aes(x = energy, y = valence)) + geom_jitter(aes(color = category)) + geom_smooth() + scale_color_manual(values = country_colors)
+# Create the ggplot and save it as a variable
+my_plot <- Top50s %>% 
+  ggplot(aes(x = energy, y = valence)) + 
+  geom_jitter(aes(color = category)) + 
+  geom_smooth() + 
+  scale_color_manual(values = country_colors)
+
+# Render the ggplot using ggplotly
+ggplotly(my_plot)
 ```
 
-### MORE COOL AND INTERESTING GRAPHS!!!
+***
+
+Interesting text in the sidebar about the plot
+
+### more cool and interesting graphs!
 
 ```{r}
 # Function to capitalize the first letter of a string
@@ -123,4 +136,4 @@ plot_feature(Top50s, valence)
 
 ***
 
-Interesting text in the sidebar about the plot(s)
+Interesting text in the sidebar about the plots
