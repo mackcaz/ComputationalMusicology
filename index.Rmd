@@ -2,20 +2,23 @@
 title: "ComputationalMusicologyPortfolio"
 author: "Mick"
 date: "2024-02-12"
-output: html_document
+output:
+  flexdashboard::flex_dashboard:
+    storyboard: true
 ---
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(cache = TRUE)
 ```
 
-  ```{r}
+```{r}
   library(tidyverse)
   library(spotifyr)
   library(dplyr)
   library(ggplot2)
-  ```
-
+  library(flexdashboard)
+  library(plotly)
+```
 
 ```{r}
 Top50Netherlands <- get_playlist_audio_features("", "37i9dQZEVXbKCF6dqVpDkS")
@@ -27,9 +30,11 @@ Top50Morocco <- get_playlist_audio_features("", "37i9dQZEVXbJU9eQpX8gPT")
 Top50UK <- get_playlist_audio_features("", "37i9dQZEVXbLnolsZ8PSNw")
 ```
 
-## Playlists
+### Introduction
 
-These are multiple top 50 playlists taken as raw data here.
+This is a long and interesting introductory text about the corpus.
+
+### Very cool and interesting graph
 
 ```{r}
 Top50s <-
@@ -44,16 +49,16 @@ Top50s <-
   )
 ```
 
-## Including Plots
-
 ```{r}
 country_colors <- c("Top50USA" = "#b22222", "Top50Australia" = "#006400", "Top50Brazil" = "#ffd700", 
                     "Top50Netherlands" = "#ff4500", "Top50Philippines" = "#0000ff", "Top50Morocco" = "#8b0000", "Top50UK" = "#000080")
 ```
 
 ```{r}
-Top50s %>% ggplot(aes(x = valence, y = energy)) + geom_jitter(aes(color = category)) + geom_smooth() + scale_color_manual(values = country_colors)
+Top50s %>% ggplot(aes(x = energy, y = valence)) + geom_jitter(aes(color = category)) + geom_smooth() + scale_color_manual(values = country_colors)
 ```
+
+### MORE COOL AND INTERESTING GRAPHS!!!
 
 ```{r}
 # Function to capitalize the first letter of a string
@@ -115,3 +120,7 @@ plot_feature(Top50s, tempo)
 plot_feature(Top50s, valence)
 
 ```
+
+***
+
+Interesting text in the sidebar about the plot(s)
