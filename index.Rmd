@@ -167,3 +167,7 @@ outlier %>%
   theme_minimal() +
   scale_fill_viridis_c()
 ```
+
+***
+
+This is a chroma graph of an outlier in the dataset: "Cruel Summer" by Taylor Swift, which is one of the oldest songs which is found in multiple top 50 lists.
