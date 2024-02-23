@@ -18,6 +18,7 @@ knitr::opts_chunk$set(cache = TRUE)
   library(ggplot2)
   library(flexdashboard)
   library(plotly)
+  library(compmus)
 ```
 
 ```{r}
@@ -140,3 +141,29 @@ plot_feature(Top50s, valence)
 ***
 
 There are a bunch of violin plots that show the distribution of different Spotify statistics sorted from the highest mean to the lowest mean. This shows a lot about the differences between countries (and continents potentially).
+
+### Chroma analysis of an outlier
+
+```{r}
+outlier <-
+  get_tidy_audio_analysis("1BxfuPKGuaTgP7aM0Bbdwr") %>% 
+  select(segments) %>% 
+  unnest(segments) %>% 
+  select(start, duration, pitches)
+
+outlier %>% 
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) %>% 
+  compmus_gather_chroma() %>% 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
