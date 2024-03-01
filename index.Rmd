@@ -171,3 +171,55 @@ outlier %>%
 ***
 
 This is a chroma graph of an outlier in the dataset: "Cruel Summer" by Taylor Swift, which is one of the oldest songs which is found in multiple top 50 lists.
+
+### Structure similarity matrix of an outlier
+
+```{r}
+bzt <-
+  get_tidy_audio_analysis("1BxfuPKGuaTgP7aM0Bbdwr") %>%
+  compmus_align(bars, segments) %>%
+  select(bars) %>%
+  unnest(bars) %>%
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "acentre", norm = "manhattan"
+      )
+  ) %>%
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "mean"
+      )
+  )
+bind_rows(
+  bzt %>%
+    compmus_self_similarity(pitches, "aitchison") %>%
+    mutate(d = d / max(d), type = "Chroma"),
+  bzt %>% 
+    compmus_self_similarity(timbre, "euclidean") %>% 
+    mutate(d = d / max(d), type = "Timbre")
+) %>%
+  mutate() %>% 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  facet_wrap(~type) +
+  scale_fill_viridis_c(option = "E", guide = "none") +
+  theme_classic() + 
+  labs(x = "", y = "")
+```
+
+***
+
+These are two self similarity matrices of  "Cruel Summer" by Taylor Swift, these similarity matrices show both Chroma and Timbre.
