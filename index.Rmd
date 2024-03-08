@@ -61,10 +61,10 @@ The corpus that will be used for this project is the top 50 of multiple countrie
 ### Release date of the songs
 
 #### Plot A
-This plot shows PLACEHOLDER
+This plot shows the release date of all songs in the top 50 of all the different regions, I expected to see mostly very new songs with maybe a few outliers. However, surprisingly a lot of songs are from before 2022, some are even as old as before 2000! This plot also shows some regional differences, the Philippines and the UK seem to enjoy older songs the most, with multiple songs from between 1998 to 2014 making their top 50s, the USA seem to enjoy songs from between 2014 to 2022. Morocco, the Netherlands, Brazil and Australia only seem to like newer songs with a handful of exceptions.
 
 #### Plot B
-This plot shows the relation between energy and valence in music from all the different top 50s, it also shows which top 50 every datapoint is from using colors typically associated with the countries that are used. It shows that energy and valence are correlated, but not as much as you might expect. It also shows some regional trends.
+This plot shows the relation between energy and valence in music from all the different top 50s. It shows that energy and valence are correlated, but not as much as you might expect. It also shows that nearly every popular song has an energy value of 0.4 or higher, those that do not always have a valence level of ~0.5 or lower. This seems to mean that while every "emotional" value is represented in the different top 50s, there does seem to be a minimal amount of energy needed for a song to become popular. A few regional differences can be observed, first of all, Brazil and the UK seem to enjoy more energetic and happier music than average, while the Philippines is the opposite. The other countries all seem to have a similar distribution in energy and valence.
 
 ## Row  {.tabset .tabset-fade style="min-height:600px"}
 
@@ -303,6 +303,7 @@ These are two self similarity matrices of  "Cruel Summer" by Taylor Swift, these
 ## Row {style="min-height:600px"}
 
 ### Description
+This chordogram shows the chords in "End of Beginning" by Djo, this song shows six clear sections. This is a typical feature of many popular songs in the corpus, because the very similar sections are the chorus returning three times which seems to be a key feature in creating a popular songs.
 
 ### Chordogram
 
