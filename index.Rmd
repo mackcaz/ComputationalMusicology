@@ -1,11 +1,26 @@
 ---
-title: "ComputationalMusicologyPortfolio"
+title: "Computational Musicology Portfolio"
 author: "Mick"
 date: "2024-02-12"
 output:
   flexdashboard::flex_dashboard:
-    storyboard: true
+    orientation: columns
+    theme:
+      version: 4
+      bootswatch: cerulean
+    vertical_layout: scroll
 ---
+
+```{=html}
+<style>
+.dataTables_scrollBody {
+    height:540px !important;
+}
+.chart-stage-flex {
+    overflow:auto !important;
+}
+</style>
+```
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(cache = TRUE)
@@ -31,12 +46,29 @@ Top50Morocco <- get_playlist_audio_features("", "37i9dQZEVXbJU9eQpX8gPT")
 Top50UK <- get_playlist_audio_features("", "37i9dQZEVXbLnolsZ8PSNw")
 ```
 
+# Corpus
+
+## Column
+
 ### Introduction
 
 The corpus that will be used for this project is the top 50 of multiple countries on Spotify that has an available top 50. This is an interesting corpus because it can show the differences and similarities between popular music in many different places across the world. The comparison points can be either countries, regions, or continents. This flexibility is another advantage of the corpus. The limitations of this corpus are the fact that recent releases or events can influence music worldwide and can push music to the top of many top 50 lists while not saying much about the differences between places (such as the recent release of Kanye West having multiple songs in multiple different top 50 lists). Another limitation is the fact that multiple countries might not use Spotify as their main source of music, so this could influence regional trends in a way that makes them not representative of the population of the country as a whole. A final weakness is the fact that this corpus changes daily, so it can be hard to look into individual tracks since they will probably be gone after a certain time. Finally, it is difficult to pick specific interesting tracks in this corpus due to the sheer number of tracks (3600) in it. But some that may be interesting at first glance are CARNIVAL (Kanye West), Cruel Summer (Taylor Swift), Unwritten (Natasha Bedingfield) and I Wanna Be Yours (Arctic Monkeys). This Kanye West song and many others of his (very) recent album are interesting because they can be found in nearly every top 50 list. The other three songs are mostly interesting because they are older songs that are still found in multiple top 50 lists across the corpus.
 
-### Are all popular songs happy and energetic?
+# Outlier analysis {data-navmenu=Analysis data-orientation=rows}
 
+## Row 
+
+### Release date of the songs
+
+#### Plot A
+This plot shows PLACEHOLDER
+
+#### Plot B
+This plot shows the relation between energy and valence in music from all the different top 50s, it also shows which top 50 every datapoint is from using colors typically associated with the countries that are used. It shows that energy and valence are correlated, but not as much as you might expect. It also shows some regional trends.
+
+## Row  {.tabset .tabset-fade style="min-height:600px"}
+
+### Plot A {data-width="650"}
 ```{r}
 Top50s <-
   bind_rows(
@@ -55,11 +87,27 @@ country_colors <- c("Top50USA" = "#b22222", "Top50Australia" = "#006400", "Top50
                     "Top50Netherlands" = "#ff4500", "Top50Philippines" = "#0000ff", "Top50Morocco" = "#8b0000", "Top50UK" = "#000080")
 ```
 
+```{r}
+# Convert release_date column to Date object
+Top50s$track.album.release_date <- as.Date(Top50s$track.album.release_date)
 
+# Create the ggplot and save it as a variable
+my_plot <- Top50s %>% 
+  ggplot(aes(x = track.album.release_date, y = track.popularity, label=track.name)) + 
+  geom_jitter(aes(color = category)) + 
+  geom_smooth() + 
+  scale_color_manual(values = country_colors)  +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y")
+
+# Render the ggplot using ggplotly
+ggplotly(my_plot)
+```
+
+### Plot B
 ```{r}
 # Create the ggplot and save it as a variable
 my_plot <- Top50s %>% 
-  ggplot(aes(x = energy, y = valence)) + 
+  ggplot(aes(x = energy, y = valence, label=track.name)) + 
   geom_jitter(aes(color = category)) + 
   geom_smooth() + 
   scale_color_manual(values = country_colors)
@@ -68,11 +116,12 @@ my_plot <- Top50s %>%
 ggplotly(my_plot)
 ```
 
-***
+# Regional differences {data-navmenu=Analysis data-orientation=rows}
 
-The first plot shows the relation between energy and valence in music from all the different top 50s, it also shows which top 50 every datapoint is from using colors typically associated with the countries that are used. It shows that energy and valence are correlated, but not as much as you might expect. It also shows some regional trends.
+#### Description
+Some text discussing all the different plots.
 
-### Differences between Pop Music in Different Regions
+## Column {.tabset .tabset-fade}
 
 ```{r}
 # Function to capitalize the first letter of a string
@@ -112,46 +161,74 @@ plot_feature <- function(data, feature) {
 
 ```
 
+### Acousticness
 ```{r}
 # plot acousticness
 plot_feature(Top50s, acousticness)
+```
 
+### Danceability
+```{r}
 # plot danceability
 plot_feature(Top50s, danceability)
+```
 
+### Energy
+```{r}
 # plot energy
 plot_feature(Top50s, energy)
+```
 
+### Liveness
+```{r}
 # plot liveness
 plot_feature(Top50s, liveness)
+```
 
+### Loudness
+```{r}
 # plot loudness
 plot_feature(Top50s, loudness)
+```
 
+### Speechiness
+```{r}
 # plot speechiness
 plot_feature(Top50s, speechiness)
+```
 
+### Tempo
+```{r}
 # plot tempo
 plot_feature(Top50s, tempo)
+```
 
+### Valence
+```{r}
 # plot valence
 plot_feature(Top50s, valence)
 ```
 
-***
+# Individual songs {data-navmenu=Analysis data-orientation=rows}
 
-There are a bunch of violin plots that show the distribution of different Spotify statistics sorted from the highest mean to the lowest mean. This shows a lot about the differences between countries (and continents potentially).
+## Row
+
+### Description
+
+This is a chroma graph of an outlier in the dataset: "Cruel Summer" by Taylor Swift, which is one of the oldest songs which is found in multiple top 50 lists.
+
+## Column
 
 ### Chroma analysis of an outlier
 
-```{r}
-outlier <-
-  get_tidy_audio_analysis("1BxfuPKGuaTgP7aM0Bbdwr") %>% 
+```{r, fig.width=15, fig.height=4}
+iris <-
+  get_tidy_audio_analysis("6Qyc6fS4DsZjB2mRW9DsQs") %>% 
   select(segments) %>% 
   unnest(segments) %>% 
   select(start, duration, pitches)
 
-outlier %>% 
+iris %>% 
   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) %>% 
   compmus_gather_chroma() %>% 
   ggplot(
@@ -168,15 +245,14 @@ outlier %>%
   scale_fill_viridis_c()
 ```
 
-***
 
-This is a chroma graph of an outlier in the dataset: "Cruel Summer" by Taylor Swift, which is one of the oldest songs which is found in multiple top 50 lists.
+## Row {style="min-height:600px"}
 
 ### Structure similarity matrix of an outlier
 
 ```{r}
-bzt <-
-  get_tidy_audio_analysis("1BxfuPKGuaTgP7aM0Bbdwr") %>%
+what_was_i_made_for <-
+  get_tidy_audio_analysis("6wf7Yu7cxBSPrRlWeSeK0Q") %>%
   compmus_align(bars, segments) %>%
   select(bars) %>%
   unnest(bars) %>%
@@ -195,10 +271,10 @@ bzt <-
       )
   )
 bind_rows(
-  bzt %>%
+  what_was_i_made_for %>%
     compmus_self_similarity(pitches, "aitchison") %>%
     mutate(d = d / max(d), type = "Chroma"),
-  bzt %>% 
+  what_was_i_made_for %>% 
     compmus_self_similarity(timbre, "euclidean") %>% 
     mutate(d = d / max(d), type = "Timbre")
 ) %>%
@@ -220,6 +296,127 @@ bind_rows(
   labs(x = "", y = "")
 ```
 
-***
+### Description
 
 These are two self similarity matrices of  "Cruel Summer" by Taylor Swift, these similarity matrices show both Chroma and Timbre.
+
+## Row {style="min-height:600px"}
+
+### Description
+
+### Chordogram
+
+```{r}
+circshift <- function(v, n) {
+  if (n == 0) v else c(tail(v, n), head(v, -n))
+}
+
+#      C     C#    D     Eb    E     F     F#    G     Ab    A     Bb    B
+major_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    0,    0)
+minor_chord <-
+  c(   1,    0,    0,    1,    0,    0,    0,    1,    0,    0,    0,    0)
+seventh_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    1,    0)
+
+major_key <-
+  c(6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88)
+minor_key <-
+  c(6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17)
+
+chord_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:7", circshift(seventh_chord, 6),
+    "Gb:maj", circshift(major_chord, 6),
+    "Bb:min", circshift(minor_chord, 10),
+    "Db:maj", circshift(major_chord, 1),
+    "F:min", circshift(minor_chord, 5),
+    "Ab:7", circshift(seventh_chord, 8),
+    "Ab:maj", circshift(major_chord, 8),
+    "C:min", circshift(minor_chord, 0),
+    "Eb:7", circshift(seventh_chord, 3),
+    "Eb:maj", circshift(major_chord, 3),
+    "G:min", circshift(minor_chord, 7),
+    "Bb:7", circshift(seventh_chord, 10),
+    "Bb:maj", circshift(major_chord, 10),
+    "D:min", circshift(minor_chord, 2),
+    "F:7", circshift(seventh_chord, 5),
+    "F:maj", circshift(major_chord, 5),
+    "A:min", circshift(minor_chord, 9),
+    "C:7", circshift(seventh_chord, 0),
+    "C:maj", circshift(major_chord, 0),
+    "E:min", circshift(minor_chord, 4),
+    "G:7", circshift(seventh_chord, 7),
+    "G:maj", circshift(major_chord, 7),
+    "B:min", circshift(minor_chord, 11),
+    "D:7", circshift(seventh_chord, 2),
+    "D:maj", circshift(major_chord, 2),
+    "F#:min", circshift(minor_chord, 6),
+    "A:7", circshift(seventh_chord, 9),
+    "A:maj", circshift(major_chord, 9),
+    "C#:min", circshift(minor_chord, 1),
+    "E:7", circshift(seventh_chord, 4),
+    "E:maj", circshift(major_chord, 4),
+    "G#:min", circshift(minor_chord, 8),
+    "B:7", circshift(seventh_chord, 11),
+    "B:maj", circshift(major_chord, 11),
+    "D#:min", circshift(minor_chord, 3)
+  )
+
+key_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:maj", circshift(major_key, 6),
+    "Bb:min", circshift(minor_key, 10),
+    "Db:maj", circshift(major_key, 1),
+    "F:min", circshift(minor_key, 5),
+    "Ab:maj", circshift(major_key, 8),
+    "C:min", circshift(minor_key, 0),
+    "Eb:maj", circshift(major_key, 3),
+    "G:min", circshift(minor_key, 7),
+    "Bb:maj", circshift(major_key, 10),
+    "D:min", circshift(minor_key, 2),
+    "F:maj", circshift(major_key, 5),
+    "A:min", circshift(minor_key, 9),
+    "C:maj", circshift(major_key, 0),
+    "E:min", circshift(minor_key, 4),
+    "G:maj", circshift(major_key, 7),
+    "B:min", circshift(minor_key, 11),
+    "D:maj", circshift(major_key, 2),
+    "F#:min", circshift(minor_key, 6),
+    "A:maj", circshift(major_key, 9),
+    "C#:min", circshift(minor_key, 1),
+    "E:maj", circshift(major_key, 4),
+    "G#:min", circshift(minor_key, 8),
+    "B:maj", circshift(major_key, 11),
+    "D#:min", circshift(minor_key, 3)
+  )
+
+end_of_beginnig <-
+  get_tidy_audio_analysis("3qhlB30KknSejmIvZZLjOD") %>%
+  compmus_align(sections, segments) %>%
+  select(sections) %>%
+  unnest(sections) %>%
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      )
+  )
+
+end_of_beginnig %>%
+  compmus_match_pitch_template(
+    key_templates,         # Change to chord_templates if descired
+    method = "euclidean",  # Try different distance metrics
+    norm = "manhattan"     # Try different norms
+  ) %>%
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "")
+```
