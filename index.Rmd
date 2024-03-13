@@ -240,7 +240,7 @@ plot_feature(Top50s, valence)
 
 ### Description
 
-This is a chroma graph of an outlier in the dataset: "Cruel Summer" by Taylor Swift, which is one of the oldest songs which is found in multiple top 50 lists.
+ADD LATER
 
 ## Column
 
@@ -276,8 +276,8 @@ iris %>%
 ### Structure similarity matrix of an outlier
 
 ```{r}
-what_was_i_made_for <-
-  get_tidy_audio_analysis("6wf7Yu7cxBSPrRlWeSeK0Q") %>%
+we_cant_be_friends <-
+  get_tidy_audio_analysis("51ZQ1vr10ffzbwIjDCwqm4") %>%
   compmus_align(bars, segments) %>%
   select(bars) %>%
   unnest(bars) %>%
@@ -296,10 +296,10 @@ what_was_i_made_for <-
       )
   )
 bind_rows(
-  what_was_i_made_for %>%
+  we_cant_be_friends %>%
     compmus_self_similarity(pitches, "aitchison") %>%
     mutate(d = d / max(d), type = "Chroma"),
-  what_was_i_made_for %>% 
+  we_cant_be_friends %>% 
     compmus_self_similarity(timbre, "euclidean") %>% 
     mutate(d = d / max(d), type = "Timbre")
 ) %>%
@@ -323,12 +323,13 @@ bind_rows(
 
 ### Description
 
-These are two self similarity matrices of  "Cruel Summer" by Taylor Swift, these similarity matrices show both Chroma and Timbre.
+These are two self similarity matrices of  "we can't be friends (wait for your love) " by Ariana Grande, these similarity matrices show both Chroma and Timbre.
 
 ## Row {style="min-height:600px"}
 
-### Description
-This chordogram shows the chords in "End of Beginning" by Djo, this song shows six clear sections. This is a typical feature of many popular songs in the corpus, because the very similar sections are the chorus returning three times which seems to be a key feature in creating a popular songs.
+### Chordogram of a pop song
+
+This chordogram shows the chords in "End of Beginning" by Djo, this song shows six clear sections. This is a typical feature of many popular songs in the corpus, because the sections showing the same chords are the chorus returning three times which has historically been a key feature in creating popular and most importantly, catchy songs.
 
 ### Chordogram
 
@@ -446,3 +447,21 @@ end_of_beginnig %>%
   theme_minimal() +
   labs(x = "Time (s)", y = "")
 ```
+
+## Row {style="min-height:600px"}
+
+### Tempogram
+```{r}
+pink_and_white <- get_tidy_audio_analysis("3xKsf9qdS1CyvXSMEid6g8")
+
+pink_and_white %>%
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) %>%
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+```
+
+### Not all pop is rhytmically simple
+This tempogram shows an outlier from the corpus. The tempogram is of the song "Pink + White" by Frank Ocean, which is not only one of the older songs in the corpus but also one of the very few songs that do not have a clear unchanging tempo all the way through the song. Overall Spotify estimates the tempo of this track at 160 BPM, and most online sources agree with this assessment, however the graph also shows activity at multiple other BPM values. This is really interesting because it suggests that the tempo of the song might not be clear to the listener, which, looking at the other song in the corpus, is not a recipe for a successful song. However, "Pink + White" has clearly defied the odds and has been a massively successful regardless,  even charting again years after its initial release date.
