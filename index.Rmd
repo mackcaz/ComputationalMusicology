@@ -118,8 +118,33 @@ ggplotly(my_plot)
 
 # Regional differences {data-navmenu=Analysis data-orientation=rows}
 
-#### Description
-Some text discussing all the different plots.
+#### Regional differences
+When looking for regional differences, it is useful to look at the individual features per country first to try and find trends and how countries differ from the norm and what the norm even is.
+
+##### Acousticness
+Acousticness shows an interesting trend, it seems like all the English-speaking countries and the Netherlands prefer less acoustic songs, Morocco likes acoustic music the most by far and their regional music seems to have more acoustic elements which reflects that preference.
+
+##### Danceability
+It seems like there are no strong regional trends in danceability between countries, Morocco has a slightly higher than average danceability preference and Philippines a slightly below average preference for danceability.
+
+##### Energy
+Brazil, the Netherlands and the UK prefer music with more energy, which might mean that South-America and Europe in general like more energetic music. The Philippines is far below average in the energy level of their music, this seems to be a strong regional preference.
+
+##### Liveness
+It seems like live music is not really all that popular in any country, on average very popular music is nearly always very polished and thus not live. Only Brazil seems to have a significant number of tracks that have a higher value in liveness, which says something about the type of music they prefer. Brazil seems to care less about the polish of typical pop music and they may appreciate the more "real" live sound.
+
+##### Loudness
+This graph is very similar to the energy graph, with the same countries on top and at the bottom. One major difference that can be found is that Brazil has a way higher average than second place, in energy the difference was smaller. This again seems to be regional preference.
+
+##### Speechiness
+This graph is very similar to liveness, popular music usually has little to no speech since that is a feature that just doesn't occur in very popular songs in general. But again there are exceptions, Morocco and Brazil do seem to have a significant amount off tracks that have some amount of speechiness which says something about the regional music they prefer.
+
+##### Tempo
+It's very interesting to see that there really seems to be an optimal tempo for a song to become popular regardless of region, only in Brazil is the average preferred tempo a bit higher which makes sense when considering their preferrence for louder and more energetic music than average.
+
+##### Valence
+The average valence seems to be at or slightly below zero, which is surprising to me because you would expect popular music to be happier on average since people like music that makes them happy in general. However, Brazil and Morocco break this trend showing a clear preference for happier songs.
+
 
 ## Column {.tabset .tabset-fade}
 
