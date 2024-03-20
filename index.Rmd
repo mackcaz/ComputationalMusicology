@@ -34,6 +34,9 @@ knitr::opts_chunk$set(cache = TRUE)
   library(flexdashboard)
   library(plotly)
   library(compmus)
+  library(tidymodels)
+  library(ggdendro)
+  library(heatmaply)
 ```
 
 ```{r}
@@ -463,5 +466,84 @@ pink_and_white %>%
   theme_classic()
 ```
 
-### Not all pop is rhytmically simple
+### Not all pop is rhythmically simple
 This tempogram shows an outlier from the corpus. The tempogram is of the song "Pink + White" by Frank Ocean, which is not only one of the older songs in the corpus but also one of the very few songs that do not have a clear unchanging tempo all the way through the song. Overall Spotify estimates the tempo of this track at 160 BPM, and most online sources agree with this assessment, however the graph also shows activity at multiple other BPM values. This is really interesting because it suggests that the tempo of the song might not be clear to the listener, which, looking at the other song in the corpus, is not a recipe for a successful song. However, "Pink + White" has clearly defied the odds and has been a massively successful regardless,  even charting again years after its initial release date.
+
+# Patterns in the Top 50 {data-navmenu=Analysis data-orientation=column}
+
+### Description
+Using Gower's distance and average linkage this dendogram and heatmap shows the trends in the Australian top 50. The reason the Australian top 50 is shown here, is that the Australian top 50 seems to be the most "average" top 50 in the corpus based on looking at the regional differences. The heatmap and dendogram doesn't show a lot of very nuanced pattern, but it does show two major categories that every popular song falls in. They are either relatively energetic and loud or they are relatively lower energy and quieter. The majority of the songs fall in the first category, which is what you would expect in popular music. 
+
+### Dendogram and heatmap {style="min-height:1000px"}
+```{r}
+get_conf_mat <- function(fit) {
+  outcome <- .get_tune_outcome_names(fit)
+  fit %>%
+    collect_predictions() %>%
+    conf_mat(truth = outcome, estimate = .pred_class)
+}  
+
+get_pr <- function(fit) {
+  fit %>%
+    conf_mat_resampled() %>%
+    group_by(Prediction) %>% mutate(precision = Freq / sum(Freq)) %>%
+    group_by(Truth) %>% mutate(recall = Freq / sum(Freq)) %>%
+    ungroup() %>% filter(Prediction == Truth) %>% 
+    select(class = Prediction, precision, recall)
+}  
+
+top50ausdendogram <-
+  get_playlist_audio_features("Spotify", "37i9dQZEVXbJPcfkRz0wJ0") %>%
+  add_audio_analysis() %>%
+  mutate(
+    segments = map2(segments, key, compmus_c_transpose),
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      ),
+    timbre =
+      map(
+        segments,
+        compmus_summarise, timbre,
+        method = "mean"
+      )
+  ) %>%
+  mutate(pitches = map(pitches, compmus_normalise, "clr")) %>%
+  mutate_at(vars(pitches, timbre), map, bind_rows) %>%
+  unnest(cols = c(pitches, timbre))
+
+top50_juice <-
+  recipe(
+    track.name ~
+      danceability +
+      energy +
+      loudness +
+      speechiness +
+      acousticness +
+      instrumentalness +
+      liveness +
+      valence +
+      tempo +
+      duration +
+      C + `C#|Db` + D + `D#|Eb` +
+      E + `F` + `F#|Gb` + G +
+      `G#|Ab` + A + `A#|Bb` + B +
+      c01 + c02 + c03 + c04 + c05 + c06 +
+      c07 + c08 + c09 + c10 + c11 + c12,
+    data = top50ausdendogram
+  ) %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  # step_range(all_predictors()) %>% 
+  prep(top50ausdendogram %>% mutate(track.name = str_trunc(track.name, 20))) %>%
+  juice() %>%
+  column_to_rownames("track.name")
+
+heatmaply(
+  top50_juice,
+  hclustfun = hclust,
+  hclust_method = "average",  # Change for single, average, or complete linkage.
+  dist_method = "gower"
+)
+```
