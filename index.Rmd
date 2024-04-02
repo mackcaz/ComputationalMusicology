@@ -55,7 +55,11 @@ Top50UK <- get_playlist_audio_features("", "37i9dQZEVXbLnolsZ8PSNw")
 
 ### Introduction
 
-The corpus that is used for this project is the top 50 of seven different countries on Spotify. The specific countries that were selected are: Australia, Brazil, Morocco, the Netherlands, the Philippines, the United Kingdom and the United States. This list of countries was chosen because it contains the most popular top 50 list by number of likes on Spotify of each continent. The Netherlands was added to these most popular top 50 lists because it's especially interesting to me as someone who lives in the Netherlands. This corpus was chosen to have both a manageable amount of songs, but also represent music from all over the world while being representative of a large chunk of the listeners of each continent. One limitation of this corpus is the fact that the countries that are the most popular in each continent are suspiciously often English-speaking countries which means that English music might be over-represented when compared to the rest of the countries that are not concluded. It also might mean that the playlists that have the most likes are not from the country with the most Spotify listeners on a continent, but that a lot of people from across the world like the top 50 of this country. This could be because English is a very commonly spoken language everywhere. However, this is hard to prove, so the reasonable assumption is that the most-liked songs are from the countries that listen to Spotify the most. Despite these limitations this website will attempt to find both regional differences and universal trends in popular music by comparing the different top 50 lists. It will also highlight some interesting outliers that are different from the vast majority of popular songs in this large corpus and dive into what makes these outliers popular despite them being different. By doing all this I hope to find out what "ingredients" a popular song is made up of in general and what "ingredients" of popular music are region-dependent, and also when these "ingredients" can be ignored or changed
+The corpus that is used for this project is the top 50 of seven different countries on Spotify. The specific countries that were selected are: Australia, Brazil, Morocco, the Netherlands, the Philippines, the United Kingdom and the United States. This list of countries was chosen because it contains the most popular top 50 list by number of likes on Spotify of each continent. The Netherlands was added to these most popular top 50 lists because it's especially interesting to me as someone who lives in the Netherlands. This corpus was chosen to have both a manageable amount of songs, but also represent music from all over the world while being representative of a large chunk of the listeners of each continent.
+
+One limitation of this corpus is the fact that the countries that are the most popular in each continent are suspiciously often English-speaking countries which means that English music might be over-represented when compared to the rest of the countries that are not concluded. It also might mean that the playlists that have the most likes are not from the country with the most Spotify listeners on a continent, but that a lot of people from across the world like the top 50 of this country. This could be because English is a very commonly spoken language everywhere. However, this is hard to prove, so the reasonable assumption is that the most-liked songs are from the countries that listen to Spotify the most. 
+
+Despite these limitations this website will attempt to find both regional differences and universal trends in popular music by comparing the different top 50 lists. It will also highlight some interesting outliers that are different from the vast majority of popular songs in this large corpus and dive into what makes these outliers popular despite them being different. By doing all this I hope to find out what "ingredients" a popular song is made up of in general and what "ingredients" of popular music are region-dependent, and also when these "ingredients" can be ignored or changed.
 
 # Outlier analysis {data-navmenu=Analysis data-orientation=rows}
 
@@ -64,10 +68,15 @@ The corpus that is used for this project is the top 50 of seven different countr
 ### Release date of the songs
 
 #### Plot A
-This plot shows the release date of all songs in the top 50 of all the different regions, I expected to see mostly very new songs with maybe a few outliers. However, surprisingly a lot of songs are from before 2022, some are even as old as before 2000! This plot also shows some regional differences, the Philippines and the UK seem to enjoy older songs the most, with multiple songs from between 1998 to 2014 making their top 50s, the USA seem to enjoy songs from between 2014 to 2022. Morocco, the Netherlands, Brazil and Australia only seem to like newer songs with a handful of exceptions.
+This plot shows a timeline of the release date of every song in the top 50 of all the different countries and their popularity, I personally expected to see mostly very new songs with maybe a few older outliers. However, a good number of songs are actually from before 2022, some are even as old as before 2000! This plot already shows some regional differences, the Philippines and the UK seem to enjoy older songs the most, with multiple songs from between 1998 to 2014 making their top 50s, the USA seem to enjoy songs from between 2014 to 2022 more than average. Morocco, the Netherlands, Brazil and Australia generally seem to like newer songs with a handful of exceptions. One general trend that can be observed here is that it seems that if older songs get popular, than they are always on the lower end or roughly in the middle of the top 50. These songs seem to never be part of the most popular few songs, probably because they have often been popular before so they may have less replayability for a good number of people. 
+
+But why do some of these older songs become popular again? One possible explanation is TikTok, the popular soundbytes on TikTok seem to have a real effect on the charts, with a significant number of older songs that occur in the top 50s also appearing on Spotify playlists filled with viral TikTok songs. For example: "Cruel Summer" (2019), "Murder On The Dancefloor" (2002), "Unwritten" (2004), "No Role Modelz" (2014) and "The Night We Met" (2015) have all gone viral on TikTok. These songs all have very recognizable parts that can be turned into soundbytes for TikTok that might evoke feelings of nostalgia for a large number of people. So when listening to older songs that have become popular, nostalgia and short recognizable soundbytes seem to be the recipe that made them popular again.
+
 
 #### Plot B
-This plot shows the relation between energy and valence in music from all the different top 50s. It shows that energy and valence are correlated, but not as much as you might expect. It also shows that nearly every popular song has an energy value of 0.4 or higher, those that do not always have a valence level of ~0.5 or lower. This seems to mean that while every "emotional" value is represented in the different top 50s, there does seem to be a minimal amount of energy needed for a song to become popular. A few regional differences can be observed, first of all, Brazil and the UK seem to enjoy more energetic and happier music than average, while the Philippines is the opposite. The other countries all seem to have a similar distribution in energy and valence.
+This plot shows the relation between energy and valence in music from all the different top 50 lists. It shows that energy and valence are somewhat correlated in the high and low range of these values, but not as much as you might expect. It also shows that nearly every popular song has an energy value of 0.4 or higher, those that do not always also have a valence level of ~0.5 or lower. This seems to mean that while every "emotional" value is represented in the different top 50 lists (which is surprising because the stereotypical pop song is very happy), there does seem to be a minimal amount of energy needed for the average song to become popular. A few regional differences can be observed, first of all, Brazil and the UK seem to enjoy more energetic and happier music than average, while the Philippines is the opposite. The other countries all seem to have a similar distribution in energy and valence. 
+
+Now let's look at the sparsely populated regions of the graph. One area that has very few songs is the area with a high energy value, but a low valence value. The songs here ("Mr. Brightside", "FE!N", "MEIO TERMO - Ao Vivo" and "leavemealone") all have something in common, they are energetic and are written similar to the average happy and energetic pop song, but they have more negative lyrics and they feature more minor chords. This acceptance of the norm of very energetic songs allow these songs to succeed in this space while keeping their negative themes. Another area that is more sparsely populated is the area with both a low energy and low valence function. The songs that are there, seem to be in this area for different reasons: "The Night We Met", "My Love Mine All Mine" and "Something in the Orange" are all big on TikTok, so they are popular for some of the reasons discussed earlier; Some songs seem to simply defy any other explanation except the fact that they break the standard. They often discuss things people can relate to, like "PAREHAS TAYO" and "Palagi", two love  songs, or "Stukje Van Mij", a song about living after a breakup, or "Evergreen", a song about difficult decisions and overthinking. So there are a plethora of reasons why some songs might differ from the norm on the energy and valence spectrum, some "hide" serious lyrics behind a typical pop sound, some are popular because of TikTok and some have no other logical explanation for being popular except for the fact that a lot of people resonate with the song and its themes.
 
 ## Row  {.tabset .tabset-fade style="min-height:600px"}
 
@@ -122,7 +131,7 @@ ggplotly(my_plot)
 # Regional differences {data-navmenu=Analysis data-orientation=rows}
 
 #### Regional differences
-When looking for regional differences, it is useful to look at the individual features per country first to try and find trends and how countries differ from the norm and what the norm even is.
+When looking for regional differences, it is useful to look at the individual features per country first to try and find  how countries differ from the norm and what the norm even is.
 
 ##### Acousticness
 Acousticness shows an interesting trend, it seems like all the English-speaking countries and the Netherlands prefer less acoustic songs, Morocco likes acoustic music the most by far and their regional music seems to have more acoustic elements which reflects that preference.
@@ -241,9 +250,9 @@ plot_feature(Top50s, valence)
 
 ## Row
 
-### Description
+### Chroma analysis of an outlier
+This graph shows the chroma analysis of the oldest song in the corpus: "Iris" by Goo Goo Dolls. This song clearly differs from the norm in one way by being way older than the average song in the corpus. However, is it also different when looking at the chroma analysis of the song? The answer is no, but that does not mean that this chroma analysis is not interesting at all. It's actually a good representation of the typical popular song. After looking at the chroma analysis of a big sample of the corpus I can conclude that this kind of chroma analysis is typical. Very few songs modulate at all, and most songs have a very simple chroma analysis like this one. This is something that is actually very noticeable when you start paying attention to it specifically when listening to popular songs. The biggest change that occurs in the song in the graph below is the lack of activity in A replaced by activity in F sharp during the instrumental section of the song highlighted using the red lines.
 
-ADD LATER
 
 ## Column
 
@@ -268,6 +277,8 @@ iris %>%
     )
   ) +
   geom_tile() +
+  geom_vline(xintercept = 135, colour = "red") +
+  geom_vline(xintercept = 198, colour = "red") +
   labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
   theme_minimal() +
   scale_fill_viridis_c()
@@ -280,7 +291,7 @@ iris %>%
 
 ```{r}
 we_cant_be_friends <-
-  get_tidy_audio_analysis("51ZQ1vr10ffzbwIjDCwqm4") %>%
+  get_tidy_audio_analysis("0uHrMbMv3c78398pIANDqR") %>%
   compmus_align(bars, segments) %>%
   select(bars) %>%
   unnest(bars) %>%
@@ -324,15 +335,17 @@ bind_rows(
   labs(x = "", y = "")
 ```
 
-### Description
+### The structure of "Europapa"
 
-These are two self similarity matrices of  "we can't be friends (wait for your love) " by Ariana Grande, these similarity matrices show both Chroma and Timbre.
+These are two self similarity matrices of  "Europapa" by Joost. The self similarity matrices don't really help answer the research question, because they show that the timbre changes often in some songs and less in others. A lot of songs have a clear repeating chorus and a lot don't, the number of times the chorus repeats clearly also differs. So there aren't really a lot of interesting trends to be found here.
+However, this graph does show some interesting things about "Europapa" particularly, it clearly shows the intro as being significantly different in timbre, but similar in chroma. The graph does have difficulty showing the chorus for this song, the first chorus can be seen in the chroma graph (starts at 13 seconds) but not in the timbre graph due to the instrumental changing for the second and third chorus. The timbre graph does show the second and third chorus clearly at 49 seconds and at 96 seconds since they have the same instrumental. This third chorus is less clear in the chroma graph but still there. The graph also clearly shows the start of the buildup to the drop of the song at around 120 seconds when both the chroma and the timbre change very significantly. So overall it's interesting how these self similarity matrices are capable of capturing a lot of the most important musical features of the song, but still can have difficulty showing something very fundamental like the chorus.
+
 
 ## Row {style="min-height:600px"}
 
-### Chordogram of a pop song
+### Chordogram of a typical pop song
 
-This chordogram shows the chords in "End of Beginning" by Djo, this song shows six clear sections. This is a typical feature of many popular songs in the corpus, because the sections showing the same chords are the chorus returning three times which has historically been a key feature in creating popular and most importantly, catchy songs.
+This chordogram shows the chords in "End of Beginning" by Djo, this song shows six clear sections. This is a typical feature of many popular songs in the corpus and many chordograms of pop songs look very similar to this. This is because the sections showing the same chords are the chorus being repeated three times with the same instrumental which has historically been a key feature in creating many popular and most importantly, catchy songs. The reason that this chordogram is so clear is due to the very abrupt nature of the changes in this song. Many other popular songs have chordograms that are similar, but the changes in these chordograms are often less obvious. This is why this particular song was chosen to show this general trend of of popular songs.
 
 ### Chordogram
 
@@ -472,7 +485,7 @@ This tempogram shows an outlier from the corpus. The tempogram is of the song "P
 # Patterns in the Top 50 {data-navmenu=Analysis data-orientation=column}
 
 ### Description
-Using Gower's distance and average linkage this dendogram and heatmap shows the trends in the Australian top 50. The reason the Australian top 50 is shown here, is that the Australian top 50 seems to be the most "average" top 50 in the corpus based on looking at the regional differences. The heatmap and dendogram doesn't show a lot of very nuanced pattern, but it does show two major categories that every popular song falls in. They are either relatively energetic and loud or they are relatively lower energy and quieter. The majority of the songs fall in the first category, which is what you would expect in popular music. 
+Using Gower's distance and average linkage this dendogram and heatmap shows the trends in the Australian top 50. The reason the Australian top 50 is shown here, is that the Australian top 50 seems to be the most "average" top 50 in the corpus based on looking at the regional differences. The heatmap and dendogram doesn't show a very nuanced pattern that can be discerned by the human eye, but it does show two major categories that every popular song falls in. They are either relatively energetic and loud (all the top rows) or they are relatively lower energy and quieter (the rows at the very bottom). The majority of the songs fall in the first category, which is what you would expect in popular music. However this graph shows again that there is space for quieter songs with less energy to succeed in the charts.
 
 ### Dendogram and heatmap {style="min-height:1000px"}
 ```{r}
@@ -552,4 +565,50 @@ heatmaply(
 
 ## Column
 
-### What does this all mean?
+### So what did I find?
+
+In conclusion this website attempted to find regional trends and general trends in popular music, while also highlighting some interesting outliers. It does this based on the top 50 of Australia, Brazil, Morocco, the Netherlands, the Philippines, the United Kingdom and the United States. Let's take a look at some features that  of these countries.
+
+**English-speaking countries (Australia, USA and the UK) and the Netherlands**
+
+- Generally very similar and very close to average on most metrics.
+
+- The UK prefers older songs more, with the oldest song having been released in 1998.
+
+- USA prefers songs from between 2014 and 2022 more than average.
+
+**Brazil**
+
+- Prefers energetic songs
+
+- Prefers way more live songs than the other countries.
+
+- Prefers loud songs
+
+- Likes songs that have some spoken parts.
+
+- Prefers happier songs
+
+**Morocco**
+
+- Prefers acoustic songs.
+
+- Prefers danceable songs slightly more.
+
+- Likes songs that have some spoken parts.
+
+- Prefers happier songs.
+
+**The Philippines**
+
+- Prefers older songs.
+
+- Prefers songs with slightly less danceability.
+
+- Prefers music with lower energy.
+
+I also observed some general trends that are found across popular music. First of all, most popular songs are newer, but a significant number are older with the exact number depending on the region. Additionally, popular songs always have either an energy level above 0.4 or a valence level below ~0.5. I observed that very few popular songs modulate, most popular songs have similar chordograms with three repeats of the chorus and many popular songs have a very simple and unchanging tempogram. Every popular song can be divided up into either a more energetic and louder song or less energetic and quieter, the majority of songs fall into the first category. 
+
+Lastly I discussed some outliers. First of all, a lot of older songs get popular due to TikTok because they evoke nostalgia and have short recognizable soundbytes. Popular songs with a low valence level but a high energy level are really rare and those that exist often seem like happy songs at first, but discuss sad themes in their lyrics. Songs with both low valence and high energy are often either also big on TikTok or people seem to simply connect with these songs due to their relatable themes. Lastly, while most songs are rhythmically simple and have an easily identifiable tempo, some, like Frank Ocean's "Pink + White",  are harder to identify for Spotify.
+
+So overall the website managed to answer the main research questions pretty successfully and show some valuable insights.
