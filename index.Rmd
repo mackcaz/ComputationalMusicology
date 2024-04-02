@@ -61,6 +61,8 @@ One limitation of this corpus is the fact that the countries that are the most p
 
 Despite these limitations this website will attempt to find both regional differences and universal trends in popular music by comparing the different top 50 lists. It will also highlight some interesting outliers that are different from the vast majority of popular songs in this large corpus and dive into what makes these outliers popular despite them being different. By doing all this I hope to find out what "ingredients" a popular song is made up of in general and what "ingredients" of popular music are region-dependent, and also when these "ingredients" can be ignored or changed.
 
+**Important note**: Due to the playlists changing daily, the descriptions of the graphs about the playlists are very likely not completely accurate when viewing the page. But they were completely accurate at the time of writing, hopefully the insights discussed are accurate so that they stay relevant.
+
 # Outlier analysis {data-navmenu=Analysis data-orientation=rows}
 
 ## Row 
